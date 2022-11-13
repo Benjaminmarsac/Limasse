@@ -1,10 +1,12 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QPushButton,QMainWindow, QComboBox, QLineEdit, QProgressBar, QMessageBox)
+from PyQt5.QtWidgets import (QApplication, QPushButton, QMainWindow,
+                             QComboBox, QLineEdit, QProgressBar, QMessageBox, QErrorMessage)
 from PyQt5.QtCore import Qt
 import pandas as pd
 import numpy as np
 from modules.utils import placement, save_data, get_save_file, get_file_to_analysis, get_folder, open_filter, header_normalizer, check_save
 from PyQt5.QtGui import QIcon
+
 
 class MassSpecterIonScreening(QMainWindow):
     def __init__(self):
@@ -63,54 +65,60 @@ class MassSpecterIonScreening(QMainWindow):
         self.input_file_lineedit.setText(response[0].split("/")[-1])
 
     def alignment_analysis_action(self):
-        data_base = header_normalizer(open_filter(
-            self.ion_filter_combobox.currentText(), self.files_names, "ion library"))
-        first_page = data_base.copy()
-        molecule = data_base.columns.to_list()
-        molecule.remove('mass')
-        save_file = get_save_file(self)
-        self.progress_bar.setMinimum(0)
-        self.progress_bar.setMaximum(100)
-        xlsx = pd.ExcelFile(self.alignement)
-        sheets = xlsx.sheet_names
-        header = molecule.copy()
-        header.extend(["mass", "intensity", "acceptation"])
-        save_data(save_file, first_page, "filter",
-                  header=first_page.columns.to_list(), mode="w")
-        missing = []
-        no_mz = []
-        for sheet in range(len(sheets)):
-            sheet_percent = int(((sheet+1)/len(sheets))*100)
-            df = header_normalizer(pd.read_excel(xlsx, sheets[sheet]))
-            filtered_df = np.zeros(len(header))
-            if "m/z" in df.columns:
-                counter = 0
-                for mass in df["m/z"]:
-                    for scan in data_base.loc[:, "mass"]:
-                        if mass <= scan * 1.0005 and mass >= scan * 0.9995:
-                            counter += 1
-                            ion = data_base.loc[(
-                                data_base.loc[:, "mass"] == scan), molecule]
-                            intensity = df.loc[df["m/z"] == mass]
-                            intensity = float(intensity["intens."])
-                            filtre_ligne = np.hstack(
-                                (ion.values[0], mass, intensity, 1))
-                            filtered_df = np.vstack(
-                                (filtered_df, filtre_ligne))
-                if counter > 0:
-                    filtered_df = pd.DataFrame(filtered_df)
-                    save_data(save_file, filtered_df,
-                              sheets[sheet], header=header, mode="a")
+        data_base = open_filter(
+            self.ion_filter_combobox.currentText(), self.files_names, "ion library")
+        if isinstance(data_base, pd.DataFrame):
+            data_base = header_normalizer(data_base)
+            first_page = data_base.copy()
+            molecule = data_base.columns.to_list()
+            molecule.remove('mass')
+            save_file = get_save_file(self)
+            self.progress_bar.setMinimum(0)
+            self.progress_bar.setMaximum(100)
+            xlsx = pd.ExcelFile(self.alignement)
+            sheets = xlsx.sheet_names
+            header = molecule.copy()
+            header.extend(["mass", "intensity", "acceptation"])
+            save_data(save_file, first_page, "filter",
+                      header=first_page.columns.to_list(), mode="w")
+            missing = []
+            no_mz = []
+            for sheet in range(len(sheets)):
+                sheet_percent = int(((sheet+1)/len(sheets))*100)
+                df = header_normalizer(pd.read_excel(xlsx, sheets[sheet]))
+                filtered_df = np.zeros(len(header))
+                if "m/z" in df.columns:
+                    counter = 0
+                    for mass in df["m/z"]:
+                        for scan in data_base.loc[:, "mass"]:
+                            if mass <= scan * 1.0005 and mass >= scan * 0.9995:
+                                counter += 1
+                                ion = data_base.loc[(
+                                    data_base.loc[:, "mass"] == scan), molecule]
+                                intensity = df.loc[df["m/z"] == mass]
+                                intensity = float(intensity["intens."])
+                                filtre_ligne = np.hstack(
+                                    (ion.values[0], mass, intensity, 1))
+                                filtered_df = np.vstack(
+                                    (filtered_df, filtre_ligne))
+                    if counter > 0:
+                        filtered_df = pd.DataFrame(filtered_df)
+                        save_data(save_file, filtered_df,
+                                  sheets[sheet], header=header, mode="a")
+                    else:
+                        missing.append(sheets[sheet])
                 else:
-                    missing.append(sheets[sheet])
-            else:
-                no_mz.append(sheets[sheet])
-            self.progress_bar.setValue(sheet_percent)
-        missing = f"Empty sheet(s) : {' / '.join(missing)}" if len(
-            missing) != 0 else "No empty sheet return."
-        no_mz = f"sheets without mz: {' / '.join(no_mz)}" if len(
-            no_mz) != 0 else "No empty sheet return."
-        QMessageBox.about(self, "Run over", f"Run done\n{missing}\n{no_mz}")
+                    no_mz.append(sheets[sheet])
+                self.progress_bar.setValue(sheet_percent)
+            missing = f"sheet(s) without results : {' / '.join(missing)}" if len(
+                missing) != 0 else "There are results for every sheet(s)"
+            no_mz = f"sheets without mz: {' / '.join(no_mz)}" if len(
+                no_mz) != 0 else "No empty sheet return."
+            QMessageBox.about(self, "Run over",
+                              f"Run done\n{missing}\n{no_mz}")
+        else:
+            err = QErrorMessage(self)
+            err.showMessage(data_base)
 
     def ion_library(self):
         save_file = get_save_file(self)

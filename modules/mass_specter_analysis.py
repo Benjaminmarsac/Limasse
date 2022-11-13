@@ -1,9 +1,11 @@
-import sys,os
+import sys
+import os
 from PyQt5.QtWidgets import QApplication, QPushButton, QMainWindow, QLineEdit, QProgressBar
 import pandas as pd
 from modules.utils import (alignment_matrix, check_save, placement, get_directory,
-                   get_file_to_analysis, presentation_settlement, ion_alignment, unitary_statistics,header_normalizer)
+                           get_file_to_analysis, presentation_settlement, ion_alignment, unitary_statistics, header_normalizer)
 from PyQt5.QtGui import QIcon
+
 
 class MassSpecterAnalysis(QMainWindow):
     def __init__(self):
@@ -23,7 +25,7 @@ class MassSpecterAnalysis(QMainWindow):
         self.progress()
         self.setWindowTitle('Mass specter analysis')
         self.setWindowIcon(QIcon('modules/limasse_logo.png'))
-        
+
     def set_file(self):
         input_file = QPushButton("Select file for analyse", self)
         input_file.setGeometry(placement(self.lateral_space, 1, self.button_width), placement(
@@ -84,18 +86,24 @@ class MassSpecterAnalysis(QMainWindow):
             f"{self.file_name_lineedit.text()}_presentation.xlsx", key, "key")
         for sheet in range(1, len(sheets)):
             sheet_percent = (int(((sheet+1)/len(sheets))*100)-10)
-            df = header_normalizer(pd.read_excel(data, sheets[sheet], index_col=0))
+            df = header_normalizer(pd.read_excel(
+                data, sheets[sheet], index_col=0))
             analyse = unitary_statistics(df)
             presentation = analyse.copy()
             presentation = presentation_settlement(presentation)
-            check_save(f"{self.file_name_lineedit.text()}_unitary.xlsx",analyse, sheets[sheet], sheet)
-            check_save(f"{self.file_name_lineedit.text()}_presentation.xlsx",presentation, sheets[sheet], sheet)
+            check_save(f"{self.file_name_lineedit.text()}_unitary.xlsx",
+                       analyse, sheets[sheet], sheet)
+            check_save(f"{self.file_name_lineedit.text()}_presentation.xlsx",
+                       presentation, sheets[sheet], sheet)
             if analyse.shape[0] > 0:
                 alignment[sheets[sheet]] = ion_alignment(analyse, alignment)
             self.progress_bar.setValue(sheet_percent)
-        alignment = alignment.loc[(alignment.loc[:, ~alignment.columns.isin(["code", "mass", "nomenclature"])] != 0).any(axis=1)]
-        alignment.to_excel(f"{self.file_name_lineedit.text()}_alignment.xlsx", sheet_name="alignment")
-        check_save(f"{self.file_name_lineedit.text()}_alignment.xlsx", alignment, "alignment")
+        alignment = alignment.loc[(alignment.loc[:, ~alignment.columns.isin(
+            ["code", "mass", "nomenclature"])] != 0).any(axis=1)]
+        alignment.to_excel(
+            f"{self.file_name_lineedit.text()}_alignment.xlsx", sheet_name="alignment")
+        check_save(
+            f"{self.file_name_lineedit.text()}_alignment.xlsx", alignment, "alignment")
         self.progress_bar.setValue(100)
 
 

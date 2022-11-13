@@ -35,7 +35,6 @@ class GlycanToolLauncher(QMainWindow):
         alignment_analysis_pushbutton.clicked.connect(self.alignment_window)
 
     def glycan_filter(self):
-
         self.spectre_2 = MassSpecterIonScreening()
         self.spectre_2.show()
 
@@ -50,7 +49,7 @@ class GlycanToolLauncher(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setStyle("Breeze")
+    app.setStyle("Fusion")
     spectre = GlycanToolLauncher()
     spectre.show()
     sys.exit(app.exec_())
