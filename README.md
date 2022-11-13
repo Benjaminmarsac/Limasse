@@ -35,7 +35,7 @@ To run, the script needs ion library format in csv file (with "," as delimiter).
 ### Output
 The output must be check in order to remove non-existing ions and check for duplications. Duplications result in the fact that multiple ion can have the same m/z, therefore put "n" in the "acceptation" column, where n is the number of duplicate, and 0 to remove non-existing ions.
 ### Common error
-Be careful to put the index "m/z" on A1 in your excel file
+Be careful, your excel file must start on A1.
 
 ## Data analysis
 ### Description
