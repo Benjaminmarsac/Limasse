@@ -1,6 +1,6 @@
 # Introduction
 
-Limasse (Lambda Ion Mass Explorer) is a python software first developed to help glycobiologists in the analysis of mass mpecter of permethylated O-glycan mix.
+Limasse (Lambda Ion Mass Explorer) is a python software first developed to help glycobiologists in the analysis of mass specter of permethylated O-glycan mix.
 
 # Requirements
 
