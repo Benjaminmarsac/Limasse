@@ -45,18 +45,18 @@ To use it, load your input, select the ouput folder (where the files will be sav
 ### Output
 The three ouputs consist in an aligment file (needed for the 3rd module) and 2 files where you have each mass specter and the percentage of each ion in the specter.
 ### Common error:
-Complete the acceptation column with diligence
+Complete the acceptation column with diligence.
 ## Alignment analysis
 ### Introduction
 This module takes as input the "alignment file" of "Data analysis", but you can add an "information file" which consist of a file where you have all the information about the alignment data (see "Information file"). The purpose of this module is to analyze you're ions knowing their classes, types or belonging.
 ### How to use it
 - First, select you're alignment file and information file (optionnal, see "information file")
 - Choose a class filter (see "class filter") OR check "all data" box if you want to analyze all ions
-- Add which class you want to analyze, or add the m/z of a wanted ions (you must be rather accurate, it takes ions with an error of 0.1%) by writting it and pressing "add". If you made a mistake you can choose to remove the last add item, or clear the whole list.
+- Add which class you want to analyze, or add the m/z of a wanted ions (you must be rather accurate, it takes ions with an error of 0.1%) by writting it and pressing "add". If you made a mistake you can choose to remove the last add item, or clear the whole list
 - You can choose the deepness of the analyze you want
-- You may also choose to select if you want to sum the different class or not.
-- Finally, you can have a preview of your data, or start the analysis, consisting of some plotting tools.
+- You may also choose to select if you want to sum the different class or not
+- Finally, you can have a preview of your data, or start the analysis, consisting of some plotting tools
 ### Class filter
 If you want to analyze your ion knowing their classes, you have to make a csv file and pu it in the "ion classes" folder. See the example in the folder. Like previously, the column the most on the right must contains the "code" of your ion. The code is the name you put in the first "ion library". If you put a composition, it will be a/b/c/d.../z with a/b/c/d.../z the number of occurence of each components. and the left you can write it's class,type,order,localisation...
 ### Information file
-To work, it needs as first line the same name as in "alignment file" (example: if in alignment file, the name of sample are "a" "b" "c", the first line of information file must countain "c" "b" "a", independently of how it's sorted. All data without it's peer will be lose. Be careful the matching is sensitive, "John" is different from "john". If a cell of your xslx is empty, the column where it belongs will be remove, be sure to have all the datas or take in consideration that some can be lose
+To work, it needs as first line the same name as in "alignment file" (example: if in alignment file, the name of sample are "a" "b" "c", the first line of information file must countain "c" "b" "a", independently of how it's sorted. All data without it's peer will be lose. Be careful the matching is sensitive, "John" is different from "john". If a cell of your xslx is empty, the column where it belongs will be remove, be sure to have all the datas or take in consideration that some can be lose.
