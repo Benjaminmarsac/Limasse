@@ -33,9 +33,8 @@ def open_filter(button_response: str, files_names: str, folder: str):
 
 def header_normalizer(df: pd.DataFrame):
     normalized = df.columns.to_list()
-    normalized = [i.lower().strip() for i in normalized]
+    normalized = [i.lower().strip().rstrip("[,.]") for i in normalized]
     df.columns = normalized
-
     return df
 
 
@@ -45,7 +44,7 @@ def placement(lateral_space, height_placement, height):
     return int(position)
 
 
-def save_data(excel_output: str, df: pd.DataFrame, sheet_name: str, header: list | None = None, mode: str = "w"):
+def save_data(excel_output: str, df: pd.DataFrame, sheet_name: str, header= None, mode: str = "w"):
     with pd.ExcelWriter(excel_output, mode=mode, engine="openpyxl") as written:
         df.to_excel(written, sheet_name, header=header)
 

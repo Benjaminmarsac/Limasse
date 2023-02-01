@@ -86,8 +86,7 @@ class MassSpecterAnalysis(QMainWindow):
             f"{self.file_name_lineedit.text()}_presentation.xlsx", key, "key")
         for sheet in range(1, len(sheets)):
             sheet_percent = (int(((sheet+1)/len(sheets))*100)-10)
-            df = header_normalizer(pd.read_excel(
-                data, sheets[sheet], index_col=0))
+            df = header_normalizer(pd.read_excel(data, sheets[sheet], index_col=0))
             analyse = unitary_statistics(df)
             presentation = analyse.copy()
             presentation = presentation_settlement(presentation)

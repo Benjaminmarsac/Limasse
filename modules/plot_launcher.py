@@ -11,7 +11,7 @@ from modules.plots.barplot import Barplot
 
 
 class PlotLauncher(QMainWindow):
-    def __init__(self, df: pd.DataFrame, information: pd.DataFrame | None, deepness: str, operation_type: str, all_data: bool):
+    def __init__(self, df: pd.DataFrame, information: pd.DataFrame, deepness: str, operation_type: str, all_data: bool):
         super().__init__()
         self.df = df.copy()
         self.all_data = all_data

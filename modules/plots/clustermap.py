@@ -4,7 +4,7 @@ import seaborn as sns
 
 
 class Clustermap():
-    def __init__(self, df: pd.DataFrame, operation_type: str, deepness: list | None = None):
+    def __init__(self, df: pd.DataFrame, operation_type: str, deepness = None):
         self.df = df.copy()
         self.deepness = deepness
         self.row_colors = None

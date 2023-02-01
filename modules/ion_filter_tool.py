@@ -96,7 +96,7 @@ class MassSpecterIonScreening(QMainWindow):
                                 ion = data_base.loc[(
                                     data_base.loc[:, "mass"] == scan), molecule]
                                 intensity = df.loc[df["m/z"] == mass]
-                                intensity = float(intensity["intens."])
+                                intensity = float(intensity["intens"])
                                 filtre_ligne = np.hstack(
                                     (ion.values[0], mass, intensity, 1))
                                 filtered_df = np.vstack(
